@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AppControleFinanceiro.Views.TransactionEdit"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="TransactionEdit">
+    <VerticalStackLayout Spacing="10">
+        <Border
+            Margin="15"
+            Padding="15"
+            BackgroundColor="Black"
+            Stroke="Transparent"
+            StrokeShape="RoundRectangle 30">
+            <Grid ColumnDefinitions="*, 30" RowDefinitions="Auto">
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    HorizontalOptions="Center"
+                    Text="Atualizar"
+                    TextColor="White" />
+                <Image
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalOptions="Center"
+                    Source="close.png"
+                    WidthRequest="17">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+            </Grid>
+        </Border>
+        <Grid Margin="30,0" ColumnDefinitions="*,*">
+            <DatePicker Margin="5,0" />
+            <RadioButton
+                Grid.Column="1"
+                Content="Receita"
+                IsChecked="True" />
+            <RadioButton
+                Grid.Column="2"
+                Margin="100,0,0,0"
+                Content="Despesa"
+                HorizontalOptions="End" />
+        </Grid>
+
+
+        <Entry Margin="15,0" Placeholder="Nome" />
+
+        <Entry Margin="15,0" Placeholder="Valor" />
+
+        <Button
+            Margin="15,0"
+            HorizontalOptions="Center"
+            Text="Salvar" />
+    </VerticalStackLayout>
+</ContentPage>
