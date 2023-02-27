@@ -3,44 +3,51 @@
     x:Class="AppControleFinanceiro.Views.TransactionList"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:AppControleFinanceiro.Libraries.Converters"
     Title="Listagem"
     NavigationPage.HasNavigationBar="False">
     <ContentPage.Resources>
         <ResourceDictionary Source="/Resources/Styles/Colors.xaml" />
+        <ResourceDictionary>
+            <converters:TransactionValueConverter x:Key="TransactionValueConverter" />
+            <converters:TransactionValueColorConverter x:Key="TransactionValueColorConverter" />
+        </ResourceDictionary>
     </ContentPage.Resources>
     <VerticalStackLayout>
         <CollectionView x:Name="CollectionViewTransactions">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="15" ColumnDefinitions="50, * , Auto">
-                        <Label
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer CommandParameter="{Binding .}" Tapped="TapGestureRecognizer_Tapped" />
+                        </Grid.GestureRecognizers>
+                        <Border
                             BackgroundColor="White"
-                            FontSize="20"
-                            HorizontalOptions="Center"
-                            Text="S"
-                            VerticalOptions="Center" />
+                            HeightRequest="40"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 20"
+                            WidthRequest="40">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer CommandParameter="{Binding .}" Tapped="TapGestureRecognizerTapped_ToDelete" />
+                            </Border.GestureRecognizers>
+                            <Label
+                                Margin="13,4"
+                                FontSize="20"
+                                Text="S" />
+                        </Border>
                         <VerticalStackLayout Grid.Column="1">
                             <Label Text="{Binding Name}" />
                             <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}" TextColor="#BABABA" />
                         </VerticalStackLayout>
                         <Label
                             Grid.Column="2"
-                            Text="{Binding Value, StringFormat='{0:C}'}"
-                            TextColor="{StaticResource Tertiary}"
+                            Text="{Binding ., Converter={StaticResource TransactionValueConverter}}"
+                            TextColor="{Binding ., Converter={StaticResource TransactionValueColorConverter}}"
                             VerticalOptions="Center" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-
-        <Button
-            Clicked="OnButtoClicked_To_TransactionAdd"
-            HorizontalOptions="Center"
-            Text="+" />
-        <Button
-            Clicked="OnButtoClicked_To_TransactionEdit"
-            HorizontalOptions="Center"
-            Text="Edit" />
         <Border
             Margin="10"
             Padding="10,15"
@@ -63,7 +70,7 @@
                     Grid.RowSpan="2"
                     Grid.Column="1"
                     Padding="0"
-                    Clicked="OnButtoClicked_To_TransactionAdd"
+                    Clicked="Button_Clicked"
                     CornerRadius="27"
                     FontSize="48"
                     HeightRequest="54"

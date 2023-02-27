@@ -1,16 +1,17 @@
+using AppControleFinanceiro.Models;
 using AppControleFinanceiro.Repositories;
-using CommunityToolkit.Mvvm;
 using CommunityToolkit.Mvvm.Messaging;
+
 
 namespace AppControleFinanceiro.Views;
 
 public partial class TransactionList : ContentPage
 {
-   
+
     private ITransactionRepository _repository;
-    public TransactionList( ITransactionRepository repository)
+    public TransactionList(ITransactionRepository repository)
     {
-        
+
         this._repository = repository;
 
         InitializeComponent();
@@ -36,16 +37,36 @@ public partial class TransactionList : ContentPage
         LabelBalance.Text = balance.ToString("C");
     }
 
-    private void OnButtoClicked_To_TransactionAdd(object sender, EventArgs args)
+    private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+    {
+        
+        var grid = (Grid)sender;
+        var gesture = (TapGestureRecognizer)grid.GestureRecognizers[0];
+        Transaction transaction = (Transaction)gesture.CommandParameter;
+
+        var transactionEdit = Handler.MauiContext.Services.GetService<TransactionEdit>();
+        transactionEdit.SetTransactionToEdit(transaction);
+        Navigation.PushModalAsync(transactionEdit);
+    }
+
+    private void Button_Clicked(object sender, EventArgs e)
     {
         var transactionAdd = Handler.MauiContext.Services.GetService<TransactionAdd>();
         Navigation.PushModalAsync(transactionAdd);
     }
 
-    private void OnButtoClicked_To_TransactionEdit(object sender, EventArgs e)
+    private async void TapGestureRecognizerTapped_ToDelete(object sender, EventArgs e)
     {
-        var transactionEdit = Handler.MauiContext.Services.GetService<TransactionEdit>();
-        Navigation.PushModalAsync(transactionEdit);
-    }
+        bool result = await App.Current.MainPage.DisplayAlert("Excluir!", "Tem certeza que deseja excluir?", "Sim", "Não");
 
+        if (result)
+        {            
+            var border = (Border)sender;
+            var gesture = (TapGestureRecognizer)border.GestureRecognizers[0];
+            Transaction transaction = (Transaction)gesture.CommandParameter;
+            _repository.Delete(transaction);
+
+            Reload();
+        }
+    }
 }
