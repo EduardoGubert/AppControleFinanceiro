@@ -12,7 +12,7 @@ namespace AppControleFinanceiro.Libraries.Converters
 
             if (transaaction == null)
             {
-                return "";
+                return string.Empty;
             }
             if (transaaction.Type == TransactionType.Income)
             {
@@ -22,7 +22,7 @@ namespace AppControleFinanceiro.Libraries.Converters
             {
                 return $"- {transaaction.Value.ToString("C")}";
             }
-            throw new NotImplementedException();
+            
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
